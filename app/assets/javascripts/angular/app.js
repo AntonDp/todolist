@@ -36,16 +36,16 @@ var listModule = angular.module("listModule", ['ngResource']);
 		});
 
 	        this.tumbler = [];
-	        if (this.prjs.projects){
-				for (var i = 0; i < this.prjs.projects.length; i++) {
+	       // if (this.prjs.projects){
+				for (var i = 0; i < 100; i++) {
 					this.tumbler[i] = [];
-					if (this.prjs.projects[i]){
-						for (var j = 0; j < this.prjs.projects[i].tasks.length; j++) {
+					//if (this.prjs.projects[i]){
+						for (var j = 0; j < 100; j++) {
 							this.tumbler[i].push(true);
 						}
-					}
+					//}
 				};
-	        }
+	        //}
 
 
 		this.addTask = function(arg) {

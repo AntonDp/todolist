@@ -102,7 +102,7 @@ var listModule = angular.module("listModule", ['ngResource']);
 			  if(project.id){
 			    TodoList.update({projectId: project.id}, project);
 			  } else {
-			    TodoList.save(project);
+			    //TodoList.save(project);
 			  }
 			  
 			});

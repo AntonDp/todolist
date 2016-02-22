@@ -54,7 +54,8 @@ var listModule = angular.module("listModule", ['ngResource']);
 				status: false,
 			    project_id: this.prjs.projects[arg].id
 			};
-			if (this.prjs.projects[arg]) {	
+			if (this.prjs.projects[arg]) {
+			    this.prjs.projects[arg].tasks = this.prjs.projects[arg].tasks || [];	
 				this.prjs.projects[arg].tasks.push(task); 
 				TaskList.save({projectId: this.prjs.projects[arg].id}, task);
 				this.taskText = "";				
@@ -73,6 +74,7 @@ var listModule = angular.module("listModule", ['ngResource']);
 		}
 		
         this.saveLists = function() {
+            this.prjs.projects = this.prjs.projects || [];
         	this.prjs.projects.push({name: '', tasks: []});
 			angular.forEach(this.prjs.projects, function(project) {
 			  console.log(project);

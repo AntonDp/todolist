@@ -24,29 +24,31 @@ var listModule = angular.module("listModule", ['ngResource']);
 	]);
 
 	listModule.controller("listCtrl", ['TodoList', 'TaskList', function(TodoList, TaskList) {
-		var todoList = this;
-		
-		this.prjs = TodoList.query();
-		console.log('this.prjs');
-		console.log(this.prjs);
-		this.prjs.$promise.then(function(data){
-	    	this.projects = data.projects; 
-			//console.log(this.projects[0].tasks.length);
+		this.init = function(){
+			var todoList = this;
+			
+			this.prjs = TodoList.query();
+			console.log('this.prjs');
+			console.log(this.prjs);
+			this.prjs.$promise.then(function(data){
+		    	this.projects = data.projects; 
+				//console.log(this.projects[0].tasks.length);
 
-		});
+			});
 
-	        this.tumbler = [];
-	       // if (this.prjs.projects){
-				for (var i = 0; i < 100; i++) {
-					this.tumbler[i] = [];
-					//if (this.prjs.projects[i]){
-						for (var j = 0; j < 100; j++) {
-							this.tumbler[i].push(true);
-						}
-					//}
-				};
-	        //}
-
+		        this.tumbler = [];
+		       // if (this.prjs.projects){
+					for (var i = 0; i < 100; i++) {
+						this.tumbler[i] = [];
+						//if (this.prjs.projects[i]){
+							for (var j = 0; j < 100; j++) {
+								this.tumbler[i].push(true);
+							}
+						//}
+					};
+		        //}
+		}
+        this.init();
 
 		this.addTask = function(arg) {
 			var task = {
@@ -74,14 +76,17 @@ var listModule = angular.module("listModule", ['ngResource']);
 		}
 		
         this.saveLists = function() {
+            var scope = this;
             this.prjs.projects = this.prjs.projects || [];
         	this.prjs.projects.push({name: '', tasks: []});
 			angular.forEach(this.prjs.projects, function(project) {
 			  console.log(project);
 			  if(project.id){
-			    TodoList.update({projectId: project.id}, project);
+			    //TodoList.update({projectId: project.id}, project);
 			  } else {
-			    TodoList.save(project);
+			    TodoList.save(project, function(data){
+			    	scope.init();
+			    });
 			  }
 			  
 			});
@@ -95,9 +100,12 @@ var listModule = angular.module("listModule", ['ngResource']);
 		}
 
 		this.editName = function(arg) {
+			console.log('arg');
+			console.log(arg);
 			this.prjs.projects[arg].name = this.listName;
 			this.prjs.projects[arg].status = this.listName;
 			angular.forEach(this.prjs.projects, function(project) {
+			  console.log('project');
 			  console.log(project);
 			  if(project.id){
 			    TodoList.update({projectId: project.id}, project);

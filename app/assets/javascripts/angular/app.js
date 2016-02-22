@@ -31,17 +31,21 @@ var listModule = angular.module("listModule", ['ngResource']);
 		console.log(this.prjs);
 		this.prjs.$promise.then(function(data){
 	    	this.projects = data.projects; 
-			console.log(this.projects[0].tasks.length);
+			//console.log(this.projects[0].tasks.length);
 
 		});
 
-	this.tumbler = [];
-			for (var i = 0; i < 100; i++) {
-				this.tumbler[i] = [];
-					for (var j = 0; j < 100; j++) {
-						this.tumbler[i].push(true);
+	        this.tumbler = [];
+	        if (this.prjs.projects){
+				for (var i = 0; i < this.prjs.projects.length; i++) {
+					this.tumbler[i] = [];
+					if (this.prjs.projects[i]){
+						for (var j = 0; j < this.prjs.projects[i].tasks.length; j++) {
+							this.tumbler[i].push(true);
+						}
 					}
-			};
+				};
+	        }
 
 
 		this.addTask = function(arg) {
@@ -50,9 +54,11 @@ var listModule = angular.module("listModule", ['ngResource']);
 				status: false,
 			    project_id: this.prjs.projects[arg].id
 			};
-			this.prjs.projects[arg].tasks.push(task); 
-			TaskList.save({projectId: this.prjs.projects[arg].id}, task);
-			this.taskText = "";				
+			if (this.prjs.projects[arg]) {	
+				this.prjs.projects[arg].tasks.push(task); 
+				TaskList.save({projectId: this.prjs.projects[arg].id}, task);
+				this.taskText = "";				
+			}
 		}
 		
 		this.delTask = function(project_id, task_id) {
